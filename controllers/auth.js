@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
 module.exports.login = function(req, res) {
@@ -9,12 +10,32 @@ module.exports.login = function(req, res) {
   });
 };
 
-module.exports.register = function(req, res) {
+module.exports.register = async function(req, res) {
   //email password
-  const user = new User({
-    email: req.body.email,
-    password: req.body.password
-  });
+  const canditate = await User.findOne({ email: req.body.email });
 
-  user.save().then(() => console.log("user created"));
+  console.log(canditate);
+  if (canditate) {
+    //Пользователь существует, выдает ошибку
+    res.status(409).json({
+      message: "Пользователь с таким email уже сущуствует"
+    });
+  } else {
+    // Проводим регистрацию
+    bcrypt.genSalt(10, function(err, salt) {
+      const password = req.body.password;
+      bcrypt.hash(password, salt, async function(err, hash) {
+        const user = new User({
+          email: req.body.email,
+          password: hash
+        });
+        try {
+          await user.save();
+          res.status(201).json(user);
+        } catch (e) {
+          console.log("Ошибка в auth.js save user to db");
+        }
+      });
+    });
+  }
 };
