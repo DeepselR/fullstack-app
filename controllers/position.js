@@ -39,8 +39,8 @@ module.exports.delete = async function (req, res) {
 };
 module.exports.update = async function (req, res) {
     try {
-        const position = await Position.findOneAndUpdate({_id: req.params.id});
-        res.status(200).json({message: "Updated successfully"}, {$set: req.body}, {new: true})
+        const position = await Position.findOneAndUpdate({_id: req.params.id}, {$set: req.body}, {new: true});
+        res.status(200).json(position)
     } catch (e) {
         errorHandler(e, res);
     }
