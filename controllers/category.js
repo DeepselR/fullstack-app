@@ -30,9 +30,15 @@ module.exports.delete = async function (req, res) {
     }
 };
 
-module.exports.create = function (req, res) {
+module.exports.create = async function (req, res) {
+    const category = new Category({
+        name: req.body.name,
+        user: req.user.id,
+        imageSrc: req.file ? req.file.path : ''
+    });
     try {
-
+        await category.save();
+        res.status(200).json(category);
     } catch (e) {
         errorHandler(e, res);
     }

@@ -5,24 +5,26 @@ const User = mongoose.model("users");
 const keys = require("../config/keys");
 
 const options = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: keys.jwt
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: keys.jwt
 };
 
 module.exports = passport => {
-  passport.use(
-    new JwtStrategy(options, async (payload, done) => {
-      const user = await User.findById(payload.userId).select("email id");
-      try {
-        if (user) {
-          done(null, user);
-        } else {
-          done(null, false);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    })
-  );
+    passport.use(
+        new JwtStrategy(options, async (payload, done) => {
+            const user = await User.findById(payload.userId).select("email id");
+            console.log('passport' + user);
+            try {
+                if (user) {
+                    done(null, user);
+                } else {
+                    done(null, false);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        })
+    );
 };
+
 
