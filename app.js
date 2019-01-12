@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const passport = require("passport");
 const authRoutes = require("./routes/auth");
 const analyticsRoutes = require("./routes/analytics");
 const categoryRoutes = require("./routes/category");
@@ -24,6 +25,8 @@ mongoose
     console.log(reason);
   });
 
+app.use(passport.initialize({}));
+require("./middleware/passport")(passport);
 app.use(morgan("dev"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
