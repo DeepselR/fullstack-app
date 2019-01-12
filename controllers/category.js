@@ -44,9 +44,14 @@ module.exports.create = async function (req, res) {
     }
 };
 
-module.exports.update = function (req, res) {
+module.exports.update = async function (req, res) {
+    const update = new Category({
+        name: req.body.name,
+        imageSrc: req.file ? req.file.path : ''
+    });
     try {
-
+        const updatedCategory = await Category.findOneAndUpdate({_id: req.params.id}, {$set: update}, {new: true});
+        res.status(200).json(updatedCategory);
     } catch (e) {
         errorHandler(e, res);
     }
