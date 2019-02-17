@@ -14,22 +14,24 @@ const app = express();
 
 mongoose.set("useCreateIndex", true);
 mongoose
-  .connect(
-    keys.mongoUri,
-    { useNewUrlParser: true }
-  )
-  .then(() => {
-    console.log("connected to db");
-  })
-  .catch(reason => {
-    console.log(reason);
-  });
+    .connect(
+        keys.mongoUri,
+        {useNewUrlParser: true}
+    )
+    .then(() => {
+        console.log("connected to db");
+    })
+    .catch(reason => {
+        console.log(reason);
+    });
 
 app.use(passport.initialize({}));
 require("./middleware/passport")(passport);
 app.use(morgan("dev"));
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/uploads", express.static("uploads"));
+
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use(cors());
