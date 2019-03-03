@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-import "materialaze-css/dist/js/materialize.js";
+import "../node_modules/materialize-css/dist/js/materialize.js";
 
 
 
